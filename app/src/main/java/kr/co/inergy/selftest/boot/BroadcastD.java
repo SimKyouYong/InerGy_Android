@@ -39,7 +39,7 @@ public class BroadcastD extends BroadcastReceiver {
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification.Builder builder = new Notification.Builder(context);
-        builder.setSmallIcon(R.mipmap.ic_launcher).setTicker("HETT").setWhen(System.currentTimeMillis())
+        builder.setSmallIcon(R.mipmap.ic_launcher).setTicker(Message).setWhen(System.currentTimeMillis())
                 .setNumber(1).setContentTitle("치매체크").setContentText(Message)
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE).setContentIntent(pendingIntent).setAutoCancel(true);
 

@@ -195,20 +195,16 @@ public class MainActivity extends Activity {
                     mWebView.loadUrl(DEFINE.SETTING_001);
                     break;
                 case R.id.home_btn:     //ok
-                    mWebView.loadUrl(DEFINE.DEFAULT_URL);
-                    //Log.e("SKY" ,"********삭제********");
-                    //deleteAlram(100);
-                    /*
-                    1. Context
-                    2. Index
-                    3. 약이름
-                    4. 메시지
-                    5. 문자 메시지
-                    6~끝. 날짜(년월일시분)
-
-                    dataSet.startAlram(mContext , 100 , "약이름" , "메시지" , "문자메시지" , 2017 , 9 , 7 , 17 , 58);
-                    dataSet.startAlram(mContext , 200 , "약이름" , "메시지" , "문자메시지" , 2017 , 9 , 7 , 17 , 59);
-                    */
+                    if (Check_Preferences.getAppPreferences(MainActivity.this , "BACK_KEY").equals("true")){
+                        Log.e("SKY" , "1");
+                        mWebView.goBack();
+                    }else if (Check_Preferences.getAppPreferences(MainActivity.this , "BACK_KEY").equals("false")){
+                        Log.e("SKY" , "2");
+                        mWebView.loadUrl("javascript:pressBackKey()");
+                    }else{
+                        Log.e("SKY" , "3");
+                        mWebView.goBack();
+                    }
                     break;
                 case R.id.back_btn:     //ok
                     //Intent alarmIntent = new Intent(getApplicationContext(), BroadcastD.class);
