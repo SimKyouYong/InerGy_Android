@@ -27,9 +27,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    compile files('libs/skylib.jar')
     compile 'com.google.firebase:firebase-messaging:10.0.1'
     compile group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION
-    compile files('libs/SkyWebViewLib.jar')
+    compile files('src/lib/SkyWebViewLib.jar')
 }
 apply plugin: 'com.google.gms.google-services'

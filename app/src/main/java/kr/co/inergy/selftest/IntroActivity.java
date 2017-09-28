@@ -23,14 +23,14 @@ public class IntroActivity extends FragmentActivity {
 
 
 	private static String[] PERMISSIONS_STORAGE = {
-			Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
 
-			Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-			Manifest.permission.RECORD_AUDIO
-			
-	};
+            Manifest.permission.RECORD_AUDIO
+
+    };
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);

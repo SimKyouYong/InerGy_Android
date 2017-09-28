@@ -13,6 +13,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +32,9 @@ import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,7 +88,15 @@ public class MainActivity extends Activity {
 
     public static MediaPlayer music;
     public static Button setting_btn , unlock_btn;
+    boolean popup = false;
 
+    public RelativeLayout view001;
+    public Button reflash;
+    public ImageView img1;
+    public TextView txt1;
+
+
+    int first_view = 0;
     public Context mContext;
     @Override
     public void onResume() {
@@ -116,7 +129,33 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         mContext = this;
+        setting_btn = (Button)findViewById(R.id.setting_btn);
+        unlock_btn = (Button)findViewById(R.id.unlock_btn);
+        view001 = (RelativeLayout)findViewById(R.id.view001);
+        reflash = (Button)findViewById(R.id.reflash);
+        img1 = (ImageView)findViewById(R.id.img1);
+        txt1 = (TextView)findViewById(R.id.txt1);
+
+        findViewById(R.id.setting_btn).setOnClickListener(btnListener);
+        findViewById(R.id.unlock_btn).setOnClickListener(btnListener);
+        findViewById(R.id.home_btn).setOnClickListener(btnListener);
+        findViewById(R.id.back_btn).setOnClickListener(btnListener);
+        findViewById(R.id.reflash).setOnClickListener(btnListener);
+
+        //인터넷 환경 체크
+        if (!checkNetwordState()) {
+            //인터넷 끊김!!
+            first_view = 1;
+            view001.setVisibility(View.VISIBLE);
+            reflash.setVisibility(View.VISIBLE);
+            img1.setVisibility(View.VISIBLE);
+            txt1.setVisibility(View.VISIBLE);
+            return;
+        }else{
+            setInit();
+        }
 
 
         if (getIntent().getStringExtra("arlam") != null){
@@ -137,13 +176,8 @@ public class MainActivity extends Activity {
             sendIntent.setType("vnd.android-dir/mms-sms");
             startActivity(sendIntent);
         }
-
-
-
-
-        setting_btn = (Button)findViewById(R.id.setting_btn);
-        unlock_btn = (Button)findViewById(R.id.unlock_btn);
-
+    }
+    private void setInit(){
         Log.e("SKY" ,"********onCreate********");
         //버전 체크
         map.clear();
@@ -177,17 +211,26 @@ public class MainActivity extends Activity {
         }else{
             mWebView.loadUrl(getIntent().getStringExtra("url"));
         }
+    }
+    public boolean checkNetwordState() {
+        ConnectivityManager connManager =(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo state_3g = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        NetworkInfo state_wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo state_blue = connManager.getNetworkInfo(ConnectivityManager.TYPE_BLUETOOTH);
 
-        findViewById(R.id.setting_btn).setOnClickListener(btnListener);
-        findViewById(R.id.unlock_btn).setOnClickListener(btnListener);
-        findViewById(R.id.home_btn).setOnClickListener(btnListener);
-        findViewById(R.id.back_btn).setOnClickListener(btnListener);
-
+        return state_3g.isConnected() || state_wifi.isConnected()|| state_blue.isConnected();
     }
     //버튼 리스너 구현 부분
     View.OnClickListener btnListener = new View.OnClickListener() {
         public void onClick(View v) {
             switch (v.getId()) {
+                case R.id.reflash:
+                    if (first_view == 1){
+                        setInit();
+                    }else{
+                        mWebView.reload();
+                    }
+                    break;
                 case R.id.setting_btn:
                     mWebView.loadUrl(DEFINE.SETTING_002);
                     break;
@@ -221,6 +264,7 @@ public class MainActivity extends Activity {
             if (msg.arg1 == 0) {
                 String res = (String) msg.obj;
 
+                Log.e("SKY" , "VERSION :: " + res);
                 String version;
                 try {
                     PackageInfo i = MainActivity.this.getPackageManager().getPackageInfo(MainActivity.this.getPackageName(), 0);
@@ -250,14 +294,37 @@ public class MainActivity extends Activity {
                     }
 
                 } catch(PackageManager.NameNotFoundException e) { }
-            }else if(msg.arg1 == 900){
+            }else if(msg.arg1 == 300){
                 mUploadMessage = (ValueCallback<Uri>) msg.obj;
-            }else if(msg.arg1 == 901){
+            }else if(msg.arg1 == 301){
                 mFilePathCallback = (ValueCallback<Uri[]>) msg.obj;
-            }else if(msg.arg1 == 902){
-                mFilePathCallback = (ValueCallback<Uri[]>) msg.obj;
+            }else if(msg.arg1 == 8002){
+                //Webvie Start
+                first_view = 2;
+                //인터넷 환경 체크
+                if (!checkNetwordState()) {
+                    //인터넷 끊김!!
+                    mWebView.goBack();
+                    view001.setVisibility(View.VISIBLE);
+                    reflash.setVisibility(View.VISIBLE);
+                    img1.setVisibility(View.VISIBLE);
+                    txt1.setVisibility(View.VISIBLE);
+                }else{
+                    reflash.setVisibility(View.GONE);
+                    img1.setVisibility(View.GONE);
+                    txt1.setVisibility(View.GONE);
+
+                    mHandler.postDelayed(r, 1000);
+                }
             }
 
+        }
+    };
+    Handler mHandler = new Handler();
+    Runnable r= new Runnable() {
+        @Override
+        public void run() {
+            view001.setVisibility(View.GONE);
         }
     };
     public void alertCheckGPS() {
