@@ -7,10 +7,10 @@ public class DEFINE {
 
 	 
 	public static final String GCM_ID ="911440898197";  						// GCM ID
-//	public static final String DEFAULT_URL = "http://snap40.cafe24.com/InerGy/sample.php";     	// URL 주소
+	public static final String DEFAULT_URL = "http://snap40.cafe24.com/InerGy/sample.php";     	// URL 주소
 //    public static final String DEFAULT_URL = "Http://app.nid.or.kr/find/sample2.aspx";     	// URL 주소
 
-    public static final String DEFAULT_URL = "http://app.nid.or.kr/main/new_main.aspx";     	// URL 주소
+//    public static final String DEFAULT_URL = "http://app.nid.or.kr/main/new_main.aspx";     	// URL 주소
     public static final String VERSION_CHECK = "http://1.214.45.90:8090/AppVersionAndroid.txt";     	// URL 주소
 //    public static final String VERSION_CHECK = "http://snap40.cafe24.com/Test/AppVersion.txt";     	// URL 주소
 

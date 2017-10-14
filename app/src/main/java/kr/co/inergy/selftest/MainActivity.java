@@ -175,6 +175,18 @@ public class MainActivity extends Activity {
             sendIntent.putExtra("address", ""); // 받는사람 번호
             sendIntent.setType("vnd.android-dir/mms-sms");
             startActivity(sendIntent);
+        }else if (getIntent().getStringExtra("arlam2") != null){
+            Log.e("SKY" , "onCreate arlam2");
+
+            String url=getIntent().getStringExtra("url");
+
+            Log.e("SKY" , "onNewIntent url :: " + url);
+
+            if(getIntent().getStringExtra("url") == null || getIntent().getStringExtra("url").equals("")){
+                mWebView.loadUrl(DEFINE.DEFAULT_URL);
+            }else{
+                mWebView.loadUrl(getIntent().getStringExtra("url"));
+            }
         }
     }
     private void setInit(){

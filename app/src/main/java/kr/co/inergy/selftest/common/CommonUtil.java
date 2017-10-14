@@ -169,4 +169,42 @@ public class CommonUtil {
 
         }
     }
+    public void startAlram2(Context context,int index ,String Name ,String Message , String SMS_Message , int year , int month , int day , int hour , int minute) {
+        Log.e("SKY" ,"********startAlram2********");
+        Log.e("SKY" , "startAlram2 url :: "+SMS_Message);
+
+        saveAlarmId(context , index);
+        Intent alarmIntent = new Intent(context, BroadcastD.class);
+        alarmIntent.putExtra("url" , SMS_Message);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, index, alarmIntent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        //알람시간 calendar에 set해주기
+
+        Log.e("SKY" , ""+year);
+        Log.e("SKY" , ""+month);
+        Log.e("SKY" , ""+day);
+        Log.e("SKY" , ""+hour);
+        Log.e("SKY" , ""+minute);
+
+        calendar.set(Calendar.YEAR,  year);
+        calendar.set(Calendar.MONTH,  month);
+        calendar.set(Calendar.DATE,  day);
+        calendar.set(Calendar.HOUR_OF_DAY,  hour);
+        calendar.set(Calendar.MINUTE,  minute);
+
+        // AlarmManager 호출
+        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        // 1분뒤에 AlarmOneMinuteBroadcastReceiver 호출 한다.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        } else {
+            //manager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, pendingIntent);
+            manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+        }
+    }
 }

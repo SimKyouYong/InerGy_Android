@@ -24,25 +24,50 @@ public class BroadcastD extends BroadcastReceiver {
         String Name=intent.getStringExtra("Name");
         String Message=intent.getStringExtra("Message");
         String SMS_Message=intent.getStringExtra("SMS_Message");
+        String url=intent.getStringExtra("url");
 
-        Log.e("SKY" , "onReceive Name :: " + Name);
-        Log.e("SKY" , "onReceive Message :: " + Message);
-        Log.e("SKY" , "onReceive SMS_Message :: " + SMS_Message);
+        if(url == null){
+            //문자 발송
+            Log.e("SKY" , "onReceive Name :: " + Name);
+            Log.e("SKY" , "onReceive Message :: " + Message);
+            Log.e("SKY" , "onReceive SMS_Message :: " + SMS_Message);
 
-        //NotificationManager 안드로이드 상태바에 메세지를 던지기위한 서비스 불러오고
-        NotificationManager notificationmanager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent it = new Intent(context, MainActivity.class);
-        it.putExtra("Name" , Name);
-        it.putExtra("Message" , Message);
-        it.putExtra("SMS_Message" , SMS_Message);
-        it.putExtra("arlam" , "arlam");
+            //NotificationManager 안드로이드 상태바에 메세지를 던지기위한 서비스 불러오고
+            NotificationManager notificationmanager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            Intent it = new Intent(context, MainActivity.class);
+            it.putExtra("Name" , Name);
+            it.putExtra("Message" , Message);
+            it.putExtra("SMS_Message" , SMS_Message);
+            it.putExtra("url" , url);
+            it.putExtra("arlam" , "arlam");
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification.Builder builder = new Notification.Builder(context);
-        builder.setSmallIcon(R.mipmap.ic_launcher).setTicker(Message).setWhen(System.currentTimeMillis())
-                .setNumber(1).setContentTitle("치매체크").setContentText(Message)
-                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE).setContentIntent(pendingIntent).setAutoCancel(true);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT);
+            Notification.Builder builder = new Notification.Builder(context);
+            builder.setSmallIcon(R.mipmap.ic_launcher).setTicker(Message).setWhen(System.currentTimeMillis())
+                    .setNumber(1).setContentTitle("치매체크").setContentText(Message)
+                    .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE).setContentIntent(pendingIntent).setAutoCancel(true);
 
-        notificationmanager.notify(1, builder.build());
+            notificationmanager.notify(1, builder.build());
+        }else{
+            //url 이동
+            Log.e("SKY" , "onReceive SMS_Message :: " + url);
+
+            //NotificationManager 안드로이드 상태바에 메세지를 던지기위한 서비스 불러오고
+            NotificationManager notificationmanager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            Intent it = new Intent(context, MainActivity.class);
+            it.putExtra("url" , url);
+            it.putExtra("arlam2" , "arlam2");
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT);
+            Notification.Builder builder = new Notification.Builder(context);
+            builder.setSmallIcon(R.mipmap.ic_launcher).setTicker(Message).setWhen(System.currentTimeMillis())
+                    .setNumber(1).setContentTitle("치매체크").setContentText(Message)
+                    .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE).setContentIntent(pendingIntent).setAutoCancel(true);
+
+            notificationmanager.notify(1, builder.build());
+
+        }
+
+
     }
 }

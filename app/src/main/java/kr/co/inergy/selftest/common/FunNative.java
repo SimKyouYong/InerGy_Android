@@ -511,6 +511,44 @@ public class FunNative  {
         vc.loadUrl("javascript:"+return_fun + "('" + "true" + "')");
 
     }
+    /* 8.알람 설정 및 삭제(문자 안보내고 특정 유알엘로 이동)
+     * param1 : 추가>0  , 삭제>1 , 모두 삭제>2
+     * param2 : 시퀀스
+     * param3 : 약이름
+     * param4 : 시작일
+     * param5 : 종료일
+     * param6 : 알람시간
+     * param7 : 푸쉬 메시지
+     * param8 : 문자메시지
+     * return :: 리턴 함수
+     * window.location.href = "js2ios://SetNoti?param1=1&param2=2&param3=3&param4=4&param5=5&param6=6&param7=7&param8=8&return=WSetNoti";
+     * */
+    public void SetNoti2(String url , Activity ac , WebView vc , String return_fun , Handler mAfterAccum){
+        Log.e("SKY" , "--SetNoti2-- :: ");
+        String val[] = url.split(",");
+        for (int i = 0; i < val.length; i++) {
+            Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+        }
+
+        if(val[0].equals("0")){
+            //추가
+            String[] time = val[5].split(":");
+            dateDD2(ac , Integer.parseInt(val[1]) , val[2] , val[6], val[7], val[3].replace("-" , ""), val[4].replace("-" , ""), Integer.parseInt(time[0]) , Integer.parseInt(time[1]));
+        }else if(val[0].equals("2")){
+            //모두 삭제
+            Intent alarmIntent = new Intent(ac, BroadcastD.class);
+            dataSet.cancelAllAlarms(ac , alarmIntent);
+        }else if(val[0].equals("1")){
+            //하나만 삭제
+            Intent alarmIntent = new Intent(ac, BroadcastD.class);
+            dataSet.cancelAlarm(ac , alarmIntent , Integer.parseInt(val[1]));
+
+
+        }
+        Log.e("SKY" , "javascript:"+return_fun + "('" + "true" + "')");
+        vc.loadUrl("javascript:"+return_fun + "('" + "true" + "')");
+
+    }
     //StartDate : 20170531  , EndDate : 20170622
     private void dateDD(Activity mContext , int index ,String Name ,String Message , String SMS_Message ,  String StartDate , String EndDate , int hour , int minute){
         Log.e("SKY" , "index :: " +index);
@@ -552,5 +590,44 @@ public class FunNative  {
             c1.add(Calendar.DATE, 1);
         }
     }
+    private void dateDD2(Activity mContext , int index ,String Name ,String Message , String SMS_Message ,  String StartDate , String EndDate , int hour , int minute){
+        Log.e("SKY" , "2index :: " +index);
+        Log.e("SKY" , "2Name :: " +Name);
+        Log.e("SKY" , "2Message :: " +Message);
+        Log.e("SKY" , "2SMS_Message :: " +SMS_Message);
+        Log.e("SKY" , "2StartDate :: " +StartDate);
+        Log.e("SKY" , "2EndDate :: " +EndDate);
+        Log.e("SKY" , "2hour :: " +hour);
+        Log.e("SKY" , "2minute :: " +minute);
+        String s1=StartDate;
+        String s2=EndDate;
+        DateFormat df = new SimpleDateFormat("yyyyMMdd");
+        //Date타입으로 변경
+        Date d1 = null;
+        Date d2 = null;
+        try {
+            d1 = df.parse( s1 );
+            d2 = df.parse( s2 );
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.e("SKY" , "EndDate :: " +e.toString());
 
+        }
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = Calendar.getInstance();
+        //Calendar 타입으로 변경 add()메소드로 1일씩 추가해 주기위해 변경
+        c1.setTime( d1 );
+        c2.setTime( d2 );
+        Log.e("SKY" , "c2");
+
+        //시작날짜와 끝 날짜를 비교해, 시작날짜가 작거나 같은 경우 출력
+        while( c1.compareTo( c2 ) !=1 ){
+            //출력
+            Log.e("SKY" , "c1.getTime() :: " +c1.get(Calendar.YEAR) + c1.get(Calendar.MONTH) + c1.get(Calendar.DATE) + c1.get(Calendar.HOUR) + c1.get(Calendar.MINUTE));
+            dataSet.startAlram2(mContext , index , Name , Message , SMS_Message , c1.get(Calendar.YEAR) , c1.get(Calendar.MONTH) , c1.get(Calendar.DATE) , hour , minute);
+
+            //시작날짜 + 1 일
+            c1.add(Calendar.DATE, 1);
+        }
+    }
 }
