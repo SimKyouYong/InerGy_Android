@@ -176,6 +176,8 @@ public class CommonUtil {
         saveAlarmId(context , index);
         Intent alarmIntent = new Intent(context, BroadcastD.class);
         alarmIntent.putExtra("url" , SMS_Message);
+        alarmIntent.putExtra("Message" , Message);
+
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, index, alarmIntent, 0);
 
         Calendar calendar = Calendar.getInstance();
