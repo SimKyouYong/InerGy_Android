@@ -77,7 +77,6 @@ public class FunNative  {
 
 
 
-
         ac.stopService(MainActivity.intent);
         if(!Check_Preferences.getAppPreferencesboolean(ac , "ING")){
             ac.startService(MainActivity.intent);

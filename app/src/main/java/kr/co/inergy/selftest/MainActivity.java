@@ -2,6 +2,8 @@ package kr.co.inergy.selftest;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -47,7 +49,6 @@ import kr.co.inergy.selftest.boot.ScreenService;
 import kr.co.inergy.selftest.common.Check_Preferences;
 import kr.co.inergy.selftest.common.CommonUtil;
 import kr.co.inergy.selftest.common.DEFINE;
-
 
 public class MainActivity extends Activity {
     private SKYWebview mWebView;             //웹뷰
@@ -101,7 +102,25 @@ public class MainActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
+        if (!isServiceRunningCheck()){
+            if (Check_Preferences.getAppPreferencesboolean(MainActivity.this , "BACKGROUND")){
+                //서비스 실행
+                intent = new Intent(this, ScreenService.class);
+                startService(MainActivity.intent);
+            }
+        }
     }
+    public boolean isServiceRunningCheck() {
+        ActivityManager manager = (ActivityManager) this.getSystemService(Activity.ACTIVITY_SERVICE);
+        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if ((service.service.getClassName()).matches(".*ScreenService.*")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     @Override
     protected void onNewIntent(Intent intent) {
         Bundle extras = intent.getExtras();
