@@ -26,6 +26,11 @@ public class BroadcastD extends BroadcastReceiver {
         String SMS_Message=intent.getStringExtra("SMS_Message");
         String url=intent.getStringExtra("url");
 
+        if(Name == null && Message == null && SMS_Message == null){
+            Log.e("SKY" , "재부팅  :: ");
+
+            return;
+        }
         if(url == null){
             //문자 발송
             Log.e("SKY" , "onReceive Name :: " + Name);
