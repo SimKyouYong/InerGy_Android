@@ -102,17 +102,19 @@ public class MainActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        if (!isServiceRunningCheck()){
+        //Log.e("SKY" , "isServiceRunningCheck() :: " + isServiceRunningCheck());
+
             if (Check_Preferences.getAppPreferencesboolean(MainActivity.this , "BACKGROUND")){
                 //서비스 실행
                 intent = new Intent(this, ScreenService.class);
+                stopService(MainActivity.intent);
                 startService(MainActivity.intent);
             }
-        }
     }
     public boolean isServiceRunningCheck() {
         ActivityManager manager = (ActivityManager) this.getSystemService(Activity.ACTIVITY_SERVICE);
         for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            Log.e("SKY" , "service.service.getClassName() :: " + service.service.getClassName());
             if ((service.service.getClassName()).matches(".*ScreenService.*")) {
                 return true;
             }

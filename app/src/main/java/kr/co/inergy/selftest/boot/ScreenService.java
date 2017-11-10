@@ -84,16 +84,21 @@ public class ScreenService extends Service {
 			}
 		}
 	};
-    /*
+
     LocationListener[] mLocationListeners = new LocationListener[]{
             new LocationListener(LocationManager.GPS_PROVIDER),
-            new LocationListener(LocationManager.NETWORK_PROVIDER)
+            new LocationListener(LocationManager.NETWORK_PROVIDER),
+            new LocationListener(LocationManager.PASSIVE_PROVIDER)
     };
-    */
 
+
+
+    /*
 	LocationListener[] mLocationListeners = new LocationListener[]{
-			new LocationListener(LocationManager.PASSIVE_PROVIDER)
+			new LocationListener(LocationManager.GPS_PROVIDER
+                    )
 	};
+	*/
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -145,8 +150,10 @@ public class ScreenService extends Service {
             mRunnable = new Runnable() {
                 @Override
                 public void run() {
+                    Log.e("SKY" , "BACKGROUND : " + Check_Preferences.getAppPreferencesboolean(getApplicationContext() , "BACKGROUND" ));
+
                     if (Check_Preferences.getAppPreferencesboolean(getApplicationContext() , "BACKGROUND" )) {
-                        Log.e("SKY" , "전송 되나......");
+                        Log.e("SKY" , "LOGIN_UDID : " + Check_Preferences.getAppPreferences(getApplicationContext() , "LOGIN_UDID"));
                         Log.e("SKY" , "latitude : " + latitude);
                         Log.e("SKY" , "longitude : " + longitude);
                         map.clear();
